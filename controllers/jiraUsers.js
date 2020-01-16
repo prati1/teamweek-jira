@@ -1,7 +1,8 @@
 const request = require("request");
 exports.listUserIssues = (req, res) => {
   let searchUrl = req._parsedUrl.search;
-  console.log(searchUrl, "searchUrl");
+  console.log("searchUrl", req.query);
+  searchUrl = `?jql=assignee=${req.query.assignee}%26project=${req.query.project}%26sprint in openSprints()`;
   request(
     {
       method: "GET",
