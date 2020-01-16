@@ -96,7 +96,7 @@
 } */
 
 table tbody tr th {
-  width: 200px;
+  width: 100px;
   text-align: center;
 }
 table tbody tr th img {
@@ -107,6 +107,7 @@ table tbody tr th img {
 table tbody tr td {
   font-weight: bold;
   font-size: 12px;
+  border: 1px solid white;
 }
 table tbody tr td:hover {
   cursor: pointer;

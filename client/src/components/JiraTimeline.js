@@ -40,7 +40,7 @@ const UserSection = props => {
   }, []);
   return (
     <div className="table-responsive">
-      <table className="table table-hover">
+      <table className="table table-hover" border cellPadding="2">
         <thead className="thead-light">
           <tr>
             <th scope="col"></th>
@@ -152,6 +152,84 @@ const UserInfo = props => {
   );
 };
 
+const SingleCard = props => {
+  const cardTime = (timeSpent, originalEstimate, status, round = false) => {
+    let originalEstimatedTime = convertSecondToHour(originalEstimate);
+    let spentTime = convertSecondToHour(timeSpent);
+    if (round) {
+      originalEstimatedTime = Math.round(originalEstimatedTime);
+      spentTime = Math.round(spentTime);
+    }
+    if (status == "Done") {
+      return spentTime;
+    }
+
+    if (timeSpent > originalEstimate) {
+      return spentTime;
+    }
+    return originalEstimatedTime;
+  };
+
+  const cardClass = status => {
+    if (status === "To Do") {
+      return "bg-danger text-white";
+    }
+    if (status === "Done") {
+      return "bg-success text-white";
+    }
+    return "bg-warning text-white";
+  };
+
+  const convertSecondToHour = time => {
+    return Math.round((time * 10) / (60 * 60)) / 10;
+  };
+
+  if (
+    cardTime(
+      Number(props.item.fields.timespent),
+      Number(props.item.fields.timeoriginalestimate),
+      props.item.fields.status.statusCategory.name
+    ) > 0
+  ) {
+    return (
+      <td
+        colSpan={
+          cardTime(
+            Number(props.item.fields.timespent),
+            Number(props.item.fields.timeoriginalestimate),
+            props.item.fields.status.statusCategory.name,
+            true
+          ) !== 0
+            ? cardTime(
+                Number(props.item.fields.timespent),
+                Number(props.item.fields.timeoriginalestimate),
+                props.item.fields.status.statusCategory.name,
+                true
+              )
+            : 1
+        }
+        className={cardClass(props.item.fields.status.statusCategory.name)}
+        issue={props.item.id}
+      >
+        <div className="issue-details">{props.item.fields.summary}</div>
+        <div className="details">
+          <div className="issue-id">{props.item.key}</div>
+          <div className="time">
+            {cardTime(
+              Number(props.item.fields.timespent),
+              Number(props.item.fields.timeoriginalestimate),
+              props.item.fields.status.statusCategory.name
+            )}{" "}
+            hrs
+          </div>
+        </div>
+      </td>
+    );
+  } else {
+    return null;
+  }
+};
+
 const UserIssues = props => {
   const [JiraIssues, setJiraIssues] = useState({});
   useEffect(() => {
@@ -184,18 +262,7 @@ const UserIssues = props => {
         {JiraIssues.issues &&
           JiraIssues.issues.length > 0 &&
           JiraIssues.issues.map((item, i) => (
-            <td
-              colSpan="5"
-              className="bg-success text-white"
-              key={i}
-              issue={item.id}
-            >
-              <div className="issue-details">{item.fields.summary}</div>
-              <div className="details">
-                <div className="issue-id">{item.key}</div>
-                <div className="time">{item.fields.timeoriginalestimate}</div>
-              </div>
-            </td>
+            <SingleCard item={item} key={i} />
           ))}
       </>
       // <Container>
