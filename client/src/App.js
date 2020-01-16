@@ -1,6 +1,6 @@
 import React from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import { Container } from "reactstrap";
 import { Route, Link, BrowserRouter as Router } from "react-router-dom";
 import AppNavbar from "./components/AppNavbar";
@@ -11,14 +11,12 @@ const App = () => {
   return (
     <div>
       <AppNavbar />
-      <Container>
-        <Router>
-          <div>
-            <Route exact path="/" component={TeamWeekHome} />
-            <Route path="/jira-timeline" component={JiraTimeline} />
-          </div>
-        </Router>
-      </Container>
+      <Router>
+        <div>
+          <Route exact path="/" component={TeamWeekHome} />
+          <Route path="/jira-timeline" component={JiraTimeline} />
+        </div>
+      </Router>
     </div>
   );
 };
